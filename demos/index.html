@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Game Engine Demos</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0f172a;
+        --panel: #111827;
+        --panel-2: #1f2937;
+        --accent: #60a5fa;
+        --text: #e5e7eb;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background: radial-gradient(circle at top, #172554 0%, var(--bg) 60%);
+        color: var(--text);
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+      .wrap {
+        width: min(980px, calc(100vw - 32px));
+        padding: 32px;
+        border-radius: 20px;
+        background: rgba(17, 24, 39, 0.9);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        box-shadow: 0 20px 60px rgba(15, 23, 42, 0.6);
+      }
+      h1 {
+        margin-top: 0;
+        font-size: clamp(2rem, 7vw, 3rem);
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 18px;
+        margin-top: 24px;
+      }
+      .card {
+        background: linear-gradient(180deg, rgba(31, 41, 55, 0.9), rgba(15, 23, 42, 0.9));
+        border: 1px solid rgba(96, 165, 250, 0.35);
+        border-radius: 16px;
+        padding: 18px;
+        text-decoration: none;
+        color: var(--text);
+        transition: transform 0.15s ease, border-color 0.15s ease;
+      }
+      .card:hover {
+        transform: translateY(-2px);
+        border-color: rgba(96, 165, 250, 0.8);
+      }
+      .card h2 {
+        margin: 0 0 8px;
+        font-size: 1.2rem;
+      }
+      .card p {
+        margin: 0;
+        line-height: 1.5;
+        color: #cbd5e1;
+      }
+      code {
+        display: inline-block;
+        background: rgba(15, 23, 42, 0.9);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        border-radius: 8px;
+        padding: 2px 6px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>Game Engine Demos</h1>
+      <p>Select a demo to preview the available 2D, 3D, and physics APIs.</p>
+      <div class="grid">
+        <a class="card" href="./2d-platformer.html">
+          <h2>2D Platformer</h2>
+          <p>See <code>Game</code>, <code>Sprite</code>, and the built-in platformer loop in action.</p>
+        </a>
+        <a class="card" href="./3d-scene.html">
+          <h2>3D Scene</h2>
+          <p>Explore camera movement, cube sprites, and WebGL rendering via <code>Game3D</code>.</p>
+        </a>
+        <a class="card" href="./physics-demo.html">
+          <h2>Physics Demo</h2>
+          <p>Check collision and force-based simulations using <code>Physics2D</code> and <code>Physics3D</code>.</p>
+        </a>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>2D Platformer Demo</title>
+    <style>
+      body { margin: 0; background: #0f172a; color: #e5e7eb; font-family: sans-serif; }
+      .frame { max-width: 960px; margin: 24px auto; }
+      canvas { display: block; margin: 0 auto; border: 1px solid #334155; background: #0b1220; }
+      .note { margin-top: 12px; text-align: center; color: #cbd5e1; }
+      a { color: #93c5fd; }
+    </style>
+  </head>
+  <body>
+    <div class="frame">
+      <canvas id="game" width="880" height="480"></canvas>
+      <div class="note"><a href="./index.html">← Back to demos</a></div>
+    </div>
+
+    <script src="../2d-engine.js"></script>
+    <script src="../index.js"></script>
+    <script>
+      const canvas = document.getElementById("game");
+      const game = new Game("platformer-demo");
+      game.setCanvas(canvas);
+
+      const player = new Sprite(32, 42, { color: "#f59e0b", stroke: "#fbbf24", lineWidth: 3 });
+      player.setPosition(70, 340);
+
+      const floor = new Sprite(canvas.width - 100, 22, { color: "#374151", x: 50, y: 420 });
+      const platform1 = new Sprite(180, 24, { color: "#22c55e", x: 200, y: 330 });
+      const platform2 = new Sprite(140, 24, { color: "#38bdf8", x: 500, y: 260 });
+      const goal = new Sprite(18, 28, { color: "#f472b6", x: 760, y: 392 });
+
+      const platforms = [floor, platform1, platform2];
+      const enemies = [
+        new Sprite(26, 26, { color: "#ef4444", x: 320, y: 394, minX: 200, maxX: 720, speed: 70 })
+      ];
+
+      game.startPlatformer({
+        player,
+        platforms,
+        enemies,
+        goal,
+        spawn: { x: 70, y: 340 },
+        speed: 260,
+        jumpSpeed: 560,
+        gravity: 1500,
+        lives: 3,
+        timeLimit: 30,
+        onUpdate: (result) => {
+          document.title = `Lives: ${result.lives} | Enemies left: ${result.remaining}`;
+        },
+        onEnd: (success, result) => {
+          const message = success ? "You win!" : `Game over — ${result.timeout ? "timeout" : "out of lives"}`;
+          console.log(message, result);
+        },
+        render: (ctx) => {
+          ctx.fillStyle = "#0b1220";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.fillStyle = "#1e293b";
+          ctx.fillRect(0, 0, canvas.width, 50);
+          ctx.fillStyle = "#9ca3af";
+          ctx.font = "16px sans-serif";
+          ctx.fillText("Arrow keys / A-D to move, W / Up / Space to jump", 20, 28);
+        }
+      });
+    </script>
+  </body>
+</html>

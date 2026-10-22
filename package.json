@@ -1,0 +1,19 @@
+{
+  "name": "game-2d3denginejs",
+  "version": "1.0.0",
+  "description": "A lightweight 2D/3D game engine with physics and browser demos.",
+  "main": "index.js",
+  "browser": "index.js",
+  "scripts": {
+    "test": "node --check 2d-engine.js && node --check game-engine-3d.js && node --check physics.js && node --check index.js"
+  },
+  "keywords": [
+    "game-engine",
+    "2d",
+    "3d",
+    "physics",
+    "javascript",
+    "browser"
+  ],
+  "license": "MIT"
+}

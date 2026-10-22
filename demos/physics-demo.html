@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Physics Demo</title>
+    <style>
+      body { margin: 0; background: #020617; color: #e2e8f0; font-family: sans-serif; }
+      .layout { display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+      canvas { border: 1px solid #1e293b; background: #0b1120; }
+      a { color: #93c5fd; }
+    </style>
+  </head>
+  <body>
+    <div class="layout">
+      <div>
+        <canvas id="physics" width="840" height="420"></canvas>
+        <p style="text-align:center;"><a href="./index.html">← Back to demos</a></p>
+      </div>
+    </div>
+
+    <script src="../physics.js"></script>
+    <script src="../index.js"></script>
+    <script>
+      const canvas = document.getElementById("physics");
+      const ctx = canvas.getContext("2d");
+      const world = new Physics2D.World({ gravityY: 680 });
+
+      const floor = world.addBody({
+        x: canvas.width / 2,
+        y: canvas.height - 20,
+        width: canvas.width,
+        height: 24,
+        static: true,
+        restitution: 0.05
+      });
+
+      const boxA = world.addBody({
+        x: 150,
+        y: 80,
+        width: 46,
+        height: 46,
+        mass: 1.2,
+        restitution: 0.38,
+        friction: 0.3
+      });
+
+      const boxB = world.addBody({
+        x: 520,
+        y: 50,
+        width: 54,
+        height: 54,
+        mass: 1.8,
+        restitution: 0.15,
+        friction: 0.5
+      });
+
+      boxA.setVelocity(180, 0);
+      boxB.setVelocity(-160, -80);
+
+      const drawBody = (body, fill) => {
+        ctx.fillStyle = fill;
+        ctx.fillRect(body.x - body.width / 2, body.y - body.height / 2, body.width, body.height);
+      };
+
+      const tick = () => {
+        world.step(1 / 60);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#020817";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        drawBody(floor, "#374151");
+        drawBody(boxA, "#60a5fa");
+        drawBody(boxB, "#f59e0b");
+
+        ctx.fillStyle = "#e2e8f0";
+        ctx.font = "16px sans-serif";
+        ctx.fillText("2D physics: gravity, collisions, restitution", 20, 28);
+
+        requestAnimationFrame(tick);
+      };
+
+      tick();
+    </script>
+  </body>
+</html>
