@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tile Map Demo</title>
+    <style>
+      body { margin: 0; background: #020817; color: #e2e8f0; font-family: sans-serif; }
+      canvas { display: block; margin: 24px auto; border: 1px solid #334155; }
+      .nav { text-align: center; }
+      a { color: #93c5fd; }
+    </style>
+  </head>
+  <body>
+    <div class="nav"><a href="./index.html">← Back to demos</a></div>
+    <canvas id="game" width="960" height="560"></canvas>
+
+    <script src="../2d-engine.js"></script>
+    <script>
+      const canvas = document.getElementById("game");
+      const ctx = canvas.getContext("2d");
+      const tileSize = 32;
+      const map = [
+        "####################",
+        "#..................#",
+        "#..####............#",
+        "#........##........#",
+        "#..................#",
+        "#......####........#",
+        "#..................#",
+        "#..........##......#",
+        "####################"
+      ];
+
+      const player = new Sprite(22, 22, { color: "#fbbf24", x: 64, y: 64 });
+
+      const drawMap = () => {
+        for (let row = 0; row < map.length; row++) {
+          for (let col = 0; col < map[row].length; col++) {
+            if (map[row][col] === "#") {
+              ctx.fillStyle = "#334155";
+              ctx.fillRect(col * tileSize, row * tileSize, tileSize, tileSize);
+            } else {
+              ctx.fillStyle = "#0f172a";
+              ctx.fillRect(col * tileSize, row * tileSize, tileSize, tileSize);
+            }
+          }
+        }
+      };
+
+      const tick = () => {
+        const delta = 1 / 60;
+        if (Game.keys.a || Game.keys.arrowleft) player.x -= 180 * delta;
+        if (Game.keys.d || Game.keys.arrowright) player.x += 180 * delta;
+        if (Game.keys.w || Game.keys.arrowup) player.y -= 180 * delta;
+        if (Game.keys.s || Game.keys.arrowdown) player.y += 180 * delta;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawMap();
+        ctx.fillStyle = "#fbbf24";
+        ctx.fillRect(player.x, player.y, player.width, player.height);
+        requestAnimationFrame(tick);
+      };
+
+      requestAnimationFrame(tick);
+    </script>
+  </body>
+</html>

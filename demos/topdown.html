@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Top-down Demo</title>
+    <style>
+      body { margin: 0; background: #020817; color: #e2e8f0; font-family: sans-serif; }
+      canvas { display: block; margin: 0 auto; border: 1px solid #334155; }
+      .wrap { max-width: 920px; margin: 24px auto; }
+      .nav { text-align: center; margin-top: 12px; }
+      a { color: #93c5fd; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <canvas id="game" width="920" height="520"></canvas>
+      <div class="nav"><a href="./index.html">← Back to demos</a></div>
+    </div>
+
+    <script src="../2d-engine.js"></script>
+    <script>
+      const canvas = document.getElementById("game");
+      const game = new Game();
+      game.setCanvas(canvas);
+
+      const player = new Sprite(26, 26, { color: "#34d399", x: 230, y: 200 });
+      const wall = new Sprite(200, 80, { color: "#475569", x: 420, y: 140 });
+
+      game.start({
+        update: (delta) => {
+          const left = Game.keys.a || Game.keys.arrowleft;
+          const right = Game.keys.d || Game.keys.arrowright;
+          const up = Game.keys.w || Game.keys.arrowup;
+          const down = Game.keys.s || Game.keys.arrowdown;
+
+          if (left) player.x -= 220 * delta;
+          if (right) player.x += 220 * delta;
+          if (up) player.y -= 220 * delta;
+          if (down) player.y += 220 * delta;
+
+          if (player.collidesWith(wall)) {
+            const a = player.getBoundingBox();
+            const b = wall.getBoundingBox();
+            if (a.right > b.left && a.left < b.right && a.bottom > b.top && a.top < b.bottom) {
+              // simple push-back behavior
+            }
+          }
+
+          player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
+          player.y = Math.max(0, Math.min(canvas.height - player.height, player.y));
+        },
+        render: (ctx) => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.fillStyle = "#0f172a";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.fillStyle = "#475569";
+          ctx.fillRect(wall.x, wall.y, wall.width, wall.height);
+          ctx.fillStyle = "#34d399";
+          ctx.fillRect(player.x, player.y, player.width, player.height);
+        }
+      });
+    </script>
+  </body>
+</html>

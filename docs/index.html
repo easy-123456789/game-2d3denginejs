@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Game Engine Docs</title>
+    <style>
+      :root {
+        --bg: #020817;
+        --panel: #0f172a;
+        --panel-2: #111827;
+        --card: #1e293b;
+        --text: #e2e8f0;
+        --muted: #94a3b8;
+        --accent: #60a5fa;
+        --accent-2: #34d399;
+        --border: rgba(148, 163, 184, 0.2);
+      }
+      body {
+        margin: 0;
+        background: linear-gradient(180deg, #020817 0%, #0f172a 100%);
+        color: var(--text);
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+      .shell {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 32px 20px 72px;
+      }
+      h1, h2, h3 {
+        margin-top: 0;
+      }
+      .hero {
+        padding: 24px 18px 18px;
+        background: rgba(15, 23, 42, 0.8);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        box-shadow: 0 18px 40px rgba(15, 23, 42, 0.4);
+      }
+      .hero h1 {
+        font-size: clamp(2.4rem, 5vw, 4rem);
+        margin-bottom: 10px;
+      }
+      .hero p {
+        color: var(--muted);
+        font-size: 1.08rem;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 18px;
+        margin-top: 24px;
+      }
+      .card {
+        background: rgba(17, 24, 39, 0.9);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 18px;
+      }
+      .card h3 {
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+      }
+      .card ul {
+        margin: 0;
+        padding-left: 18px;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+      code {
+        background: rgba(15, 23, 42, 0.95);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 2px 6px;
+      }
+      a { color: var(--accent); }
+      .demo-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 12px;
+      }
+      .demo-list a {
+        display: inline-block;
+        padding: 8px 10px;
+        border-radius: 999px;
+        background: rgba(96, 165, 250, 0.12);
+        border: 1px solid rgba(96, 165, 250, 0.25);
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <section class="hero">
+        <h1>Game Engine Docs</h1>
+        <p>
+          A browser-first 2D/3D JavaScript engine with physics, input helpers, and a growing set of prototype demos.
+        </p>
+        <div class="demo-list">
+          <a href="../demos/index.html">Demo index</a>
+          <a href="../demos/2d-platformer.html">2D platformer</a>
+          <a href="../demos/3d-scene.html">3D scene</a>
+          <a href="../demos/physics-demo.html">Physics</a>
+        </div>
+      </section>
+
+      <div class="grid">
+        <section class="card">
+          <h3>Core API</h3>
+          <ul>
+            <li><code>Game</code> for canvas-based 2D loop and platformers</li>
+            <li><code>Sprite</code> for draw, collisions, and simple visuals</li>
+            <li><code>Game3D</code> for WebGL scenes and camera controls</li>
+            <li><code>Sprite3D</code> for 3D cube-like actors</li>
+          </ul>
+        </section>
+
+        <section class="card">
+          <h3>Physics</h3>
+          <ul>
+            <li><code>Physics2D.World</code> and <code>Physics3D.World</code></li>
+            <li>Body forces, velocities, restitution, friction</li>
+            <li>Simple AABB collision resolution for prototypes</li>
+          </ul>
+        </section>
+
+        <section class="card">
+          <h3>Input</h3>
+          <ul>
+            <li>Keyboard listeners via <code>registerKey()</code></li>
+            <li>Standard movement keys: WASD, arrow keys, space</li>
+            <li>Works in browser canvas contexts without extra setup</li>
+          </ul>
+        </section>
+      </div>
+
+      <section class="card" style="margin-top:24px;">
+        <h3>Basic example</h3>
+        <pre><code>const game = new Game("demo");
+const canvas = document.getElementById("game");
+game.setCanvas(canvas);
+
+const box = new Sprite(40, 40, { color: "#60a5fa" });
+box.setPosition(30, 30);
+game.add(box);
+
+game.start({
+  update: () => {
+    box.x += 1;
+  },
+  render: (ctx) => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+});</code></pre>
+      </section>
+    </div>
+  </body>
+</html>

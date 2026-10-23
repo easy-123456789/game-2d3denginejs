@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shooting Demo</title>
+    <style>
+      body { margin: 0; background: #020817; color: #e2e8f0; font-family: sans-serif; }
+      canvas { display: block; margin: 0 auto; border: 1px solid #334155; }
+      .wrap { max-width: 920px; margin: 24px auto; }
+      .nav { text-align: center; margin-top: 12px; }
+      a { color: #93c5fd; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <canvas id="game" width="920" height="520"></canvas>
+      <div class="nav"><a href="./index.html">← Back to demos</a></div>
+    </div>
+
+    <script src="../2d-engine.js"></script>
+    <script>
+      const canvas = document.getElementById("game");
+      const game = new Game();
+      game.setCanvas(canvas);
+
+      const bullets = [];
+      const enemies = [];
+      const player = new Sprite(28, 28, { color: "#60a5fa", x: 120, y: 220 });
+      const keys = Game.keys;
+
+      const spawnEnemy = () => {
+        enemies.push(new Sprite(24, 24, { x: canvas.width - 50, y: Math.random() * (canvas.height - 60), color: "#f87171" }));
+      };
+
+      setInterval(spawnEnemy, 900);
+
+      game.registerKey({ key: ["ArrowLeft", "a"], callback: () => { player.x -= 5; } });
+      game.registerKey({ key: ["ArrowRight", "d"], callback: () => { player.x += 5; } });
+      game.registerKey({ key: ["ArrowUp", "w"], callback: () => { player.y -= 5; } });
+      game.registerKey({ key: ["ArrowDown", "s"], callback: () => { player.y += 5; } });
+      game.registerKey({ key: " ", callback: () => {
+        bullets.push({ x: player.x + player.width, y: player.y + player.height / 2, vx: 8, vy: 0 });
+      }});
+
+      game.start({
+        update: (delta) => {
+          if (keys.a || keys.arrowleft) player.x -= 240 * delta;
+          if (keys.d || keys.arrowright) player.x += 240 * delta;
+          if (keys.w || keys.arrowup) player.y -= 240 * delta;
+          if (keys.s || keys.arrowdown) player.y += 240 * delta;
+          player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
+          player.y = Math.max(0, Math.min(canvas.height - player.height, player.y));
+
+          for (let i = bullets.length - 1; i >= 0; i--) {
+            bullets[i].x += bullets[i].vx * 60 * delta;
+            if (bullets[i].x > canvas.width) bullets.splice(i, 1);
+          }
+
+          for (let i = enemies.length - 1; i >= 0; i--) {
+            const enemy = enemies[i];
+            enemy.x -= 120 * delta;
+            if (enemy.x < -20) enemies.splice(i, 1);
+
+            for (let j = bullets.length - 1; j >= 0; j--) {
+              const bullet = bullets[j];
+              if (bullet.x + 4 > enemy.x && bullet.x < enemy.x + enemy.width && bullet.y > enemy.y && bullet.y < enemy.y + enemy.height) {
+                bullets.splice(j, 1);
+                enemies.splice(i, 1);
+                break;
+              }
+            }
+          }
+        },
+        render: (ctx) => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.fillStyle = "#0f172a";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.fillStyle = "#60a5fa";
+          ctx.fillRect(player.x, player.y, player.width, player.height);
+          for (const bullet of bullets) {
+            ctx.fillStyle = "#f8fafc";
+            ctx.fillRect(bullet.x, bullet.y, 10, 4);
+          }
+          for (const enemy of enemies) {
+            ctx.fillStyle = "#f87171";
+            ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
